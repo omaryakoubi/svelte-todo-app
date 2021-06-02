@@ -1,17 +1,21 @@
 <script>
   import { todos } from "../store/stores";
-  console.log("todos", todos);
+  import { v4 as uuidv4 } from "uuid";
+
   let todo = "",
     todos_value;
 
-  const unsubscribe = todos.subscribe((value) => {
+  todos.subscribe((value) => {
     todos_value = value;
   });
 
-  function getInputValue(e) {
+  const clearInput = () => (todo = "");
+
+  const setTodo = (e) => {
     e.preventDefault();
-    todos.set([...todos_value, todo]);
-  }
+    todos.set([...todos_value, { id: uuidv4(), task: todo }]);
+    clearInput();
+  };
 </script>
 
 <nav class="navbar fixed-top navbar-dark bg-dark">
@@ -23,9 +27,7 @@
         placeholder="Add todo"
         bind:value={todo}
       />
-      <button class="btn btn-outline-primary" on:click={getInputValue}
-        >Add</button
-      >
+      <button class="btn btn-outline-primary" on:click={setTodo}>Add</button>
     </form>
   </div>
 </nav>
